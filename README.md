@@ -34,3 +34,30 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+## CSS
+
+ where CSS and UI tokens are defined and managed.
+
+CSS and UI tokens are defined and managed in a three-tier system:
+
+1. Source Definition: tokens.jsonc
+
+Primitives - Base values (colors, spacing, radius, fonts)
+Aliases - Semantic tokens that reference primitives (brand, surface, text)
+Themes - Theme-specific overrides (dark theme)
+2. Build Script: build-tokens.js
+
+Converts JSONC to CSS variables
+Resolves token references (e.g., {primitives.color.accent.600})
+Flattens to kebab-case (e.g., --color-brand-strong)
+Generates :root and [data-theme="dark"] selectors
+3. Output: tokens.css
+
+Auto-generated CSS custom properties
+Imported in layout.tsx
+Consumed by Tailwind via tailwind.config.ts
+Used directly in components
+Workflow: Edit tokens.jsonc → Run pnpm run tokens → CSS variables update → Components use via Tailwind or var(--*) syntax
