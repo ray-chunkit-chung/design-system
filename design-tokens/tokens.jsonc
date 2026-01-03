@@ -1,0 +1,208 @@
+{
+  // Primitive tokens: base values that rarely change. Keep exhaustive enough for theming.
+  "primitives": {
+    "color": {
+      "gray": {
+        "50": "#111318",
+        "75": "#161921",
+        "100": "#1b1f2a",
+        "200": "#232838",
+        "300": "#2e3550",
+        "400": "#3b4469",
+        "500": "#4c5684",
+        "600": "#616d9d",
+        "700": "#7e8bbc",
+        "800": "#a6b0d8",
+        "900": "#d4dbf1"
+      },
+      "accent": {
+        "50": "#0f1629",
+        "100": "#112140",
+        "200": "#12315f",
+        "300": "#17417d",
+        "400": "#1f4f95",
+        "500": "#2a60b0",
+        "600": "#3a7bdb",
+        "700": "#5a9cf5",
+        "800": "#8ab9ff",
+        "900": "#c8deff"
+      },
+      "support": {
+        "success": "#34d399",
+        "warning": "#fbbf24",
+        "critical": "#f87171",
+        "info": "#38bdf8"
+      }
+    },
+    "spacing": {
+      "2xs": "4px",
+      "xs": "6px",
+      "sm": "8px",
+      "md": "12px",
+      "lg": "16px",
+      "xl": "24px",
+      "2xl": "32px",
+      "3xl": "48px"
+    },
+    "radius": {
+      "none": "0px",
+      "sm": "2px",
+      "md": "6px",
+      "lg": "10px",
+      "pill": "999px"
+    },
+    "font": {
+      "family": {
+        "sans": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+        "mono": "'Fira Code', 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace"
+      },
+      "size": {
+        "xs": "12px",
+        "sm": "14px",
+        "md": "16px",
+        "lg": "18px",
+        "xl": "20px",
+        "2xl": "24px",
+        "3xl": "30px",
+        "4xl": "36px"
+      },
+      "lineHeight": {
+        "tight": "110%",
+        "normal": "140%",
+        "loose": "160%"
+      },
+      "weight": {
+        "regular": "400",
+        "medium": "500",
+        "semibold": "600",
+        "bold": "700"
+      }
+    }
+  },
+  // Alias tokens: semantic roles (brand, surface, text) mapped from primitives.
+  "aliases": {
+    "color": {
+      "brand": {
+        "strong": "{primitives.color.accent.600}",
+        "base": "{primitives.color.accent.500}",
+        "muted": "{primitives.color.accent.300}",
+        "subtle": "{primitives.color.accent.200}"
+      },
+      "surface": {
+        "base": "{primitives.color.gray.75}",
+        "raised": "{primitives.color.gray.100}",
+        "sunken": "{primitives.color.gray.50}"
+      },
+      "border": {
+        "strong": "{primitives.color.gray.500}",
+        "muted": "{primitives.color.gray.400}",
+        "hairline": "{primitives.color.gray.300}"
+      },
+      "text": {
+        "primary": "{primitives.color.gray.900}",
+        "secondary": "{primitives.color.gray.700}",
+        "muted": "{primitives.color.gray.600}",
+        "onBrand": "#0b1220"
+      },
+      "status": {
+        "success": "{primitives.color.support.success}",
+        "warning": "{primitives.color.support.warning}",
+        "critical": "{primitives.color.support.critical}",
+        "info": "{primitives.color.support.info}"
+      }
+    },
+    "spacing": {
+      "field": "{primitives.spacing.md}",
+      "section": "{primitives.spacing.xl}",
+      "page": "{primitives.spacing.2xl}"
+    },
+    "radius": {
+      "input": "{primitives.radius.md}",
+      "card": "{primitives.radius.lg}",
+      "pill": "{primitives.radius.pill}"
+    },
+    "font": {
+      "body": {
+        "family": "{primitives.font.family.sans}",
+        "size": "{primitives.font.size.md}",
+        "lineHeight": "{primitives.font.lineHeight.normal}",
+        "weight": "{primitives.font.weight.regular}"
+      },
+      "bodyStrong": {
+        "family": "{primitives.font.family.sans}",
+        "size": "{primitives.font.size.md}",
+        "lineHeight": "{primitives.font.lineHeight.normal}",
+        "weight": "{primitives.font.weight.semibold}"
+      },
+      "heading": {
+        "family": "{primitives.font.family.sans}",
+        "lineHeight": "{primitives.font.lineHeight.tight}"
+      }
+    }
+  },
+  // Theme tokens: concrete values for a specific appearance (dark).
+  "themes": {
+    "dark": {
+      "color": {
+        "background": {
+          "page": "{aliases.color.surface.base}",
+          "panel": "{aliases.color.surface.raised}",
+          "sunken": "{aliases.color.surface.sunken}"
+        },
+        "text": {
+          "primary": "{aliases.color.text.primary}",
+          "secondary": "{aliases.color.text.secondary}",
+          "muted": "{aliases.color.text.muted}",
+          "onBrand": "{aliases.color.text.onBrand}"
+        },
+        "border": {
+          "default": "{aliases.color.border.muted}",
+          "strong": "{aliases.color.border.strong}"
+        },
+        "brand": {
+          "solid": "{aliases.color.brand.base}",
+          "solidStrong": "{aliases.color.brand.strong}",
+          "muted": "{aliases.color.brand.muted}"
+        },
+        "status": {
+          "success": "{aliases.color.status.success}",
+          "warning": "{aliases.color.status.warning}",
+          "critical": "{aliases.color.status.critical}",
+          "info": "{aliases.color.status.info}"
+        }
+      },
+      "spacing": {
+        "gapSm": "{aliases.spacing.field}",
+        "gapLg": "{aliases.spacing.section}"
+      },
+      "radius": {
+        "input": "{aliases.radius.input}",
+        "card": "{aliases.radius.card}"
+      },
+      "font": {
+        "body": "{aliases.font.body}",
+        "bodyStrong": "{aliases.font.bodyStrong}",
+        "heading": {
+          "h1": {
+            "family": "{aliases.font.heading.family}",
+            "size": "{primitives.font.size.4xl}",
+            "weight": "{primitives.font.weight.semibold}",
+            "lineHeight": "{aliases.font.heading.lineHeight}"
+          },
+          "h2": {
+            "family": "{aliases.font.heading.family}",
+            "size": "{primitives.font.size.3xl}",
+            "weight": "{primitives.font.weight.semibold}",
+            "lineHeight": "{aliases.font.heading.lineHeight}"
+          },
+          "h3": {
+            "family": "{aliases.font.heading.family}",
+            "size": "{primitives.font.size.2xl}",
+            "weight": "{primitives.font.weight.medium}",
+            "lineHeight": "{aliases.font.heading.lineHeight}"
+          }
+        }
+      }
+    }
+  }
+}
