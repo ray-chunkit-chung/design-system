@@ -2,7 +2,11 @@
 // Converts design-tokens/tokens.jsonc → styles/tokens.css
 const fs = require('fs');
 const path = require('path');
-const stripJsonComments = require('strip-json-comments');
+const stripJsonCommentsModule = require('strip-json-comments');
+const stripJsonComments =
+  typeof stripJsonCommentsModule === 'function'
+    ? stripJsonCommentsModule
+    : stripJsonCommentsModule.default;
 
 const SRC = path.join(__dirname, '..', 'design-tokens', 'tokens.jsonc');
 const OUT = path.join(__dirname, '..', 'styles', 'tokens.css');
@@ -12,42 +16,40 @@ const flatten = (obj, prefix = []) =>
   Object.entries(obj).flatMap(([k, v]) =>
     typeof v === 'object' && !Array.isArray(v)
       ? flatten(v, [...prefix, kebab(k)])
-      : [[...prefix, kebab(k)].join('-'), v]
+      : [[ [...prefix, kebab(k)].join('-'), v ]]
   );
 
-const resolveRefs = (value, map) => {
-  if (typeof value !== 'string') return value;
-  const ref = value.match(/^\{(.+)\}$/);
-  if (!ref) return value;
-  const key = ref[1];
-  return map[key];
+// Resolve {path.to.token} placeholders recursively against the source JSON tree.
+const resolveRefs = (value, root) => {
+  if (typeof value === 'string') {
+    const ref = value.match(/^\{(.+)\}$/);
+    if (!ref) return value;
+    const target = ref[1].split('.').reduce((acc, key) => (acc ? acc[key] : undefined), root);
+    return resolveRefs(target, root);
+  }
+  if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
+    return Object.fromEntries(Object.entries(value).map(([k, v]) => [k, resolveRefs(v, root)]));
+  }
+  return value;
 };
 
 const main = () => {
   const raw = fs.readFileSync(SRC, 'utf8');
   const json = JSON.parse(stripJsonComments(raw));
 
-  // Collect primitives
-  const primitives = flatten(json.primitives);
-  const primitiveMap = Object.fromEntries(
-    primitives.map(([k, v]) => [`primitives.${k.replace(/-/g, '.')}`, v])
+  // Resolve references into concrete values/objects before flattening.
+  const resolvedAliases = resolveRefs(json.aliases, json);
+  const resolvedThemes = Object.fromEntries(
+    Object.entries(json.themes).map(([themeName, themeObj]) => [themeName, resolveRefs(themeObj, json)])
   );
 
-  // Collect aliases (resolved)
-  const aliases = flatten(json.aliases).map(([k, v]) => {
-    const resolved = resolveRefs(v, { ...primitiveMap });
-    return [k, resolved];
-  });
-  const aliasMap = Object.fromEntries(
-    aliases.map(([k, v]) => [`aliases.${k.replace(/-/g, '.')}`, v])
-  );
+  // Collect primitives and resolved aliases
+  const primitives = flatten(json.primitives);
+  const aliases = flatten(resolvedAliases);
 
   // Theme vars (resolved through aliases/primitives)
-  const themes = Object.entries(json.themes).map(([themeName, themeObj]) => {
-    const entries = flatten(themeObj).map(([k, v]) => {
-      const resolved = resolveRefs(v, { ...primitiveMap, ...aliasMap });
-      return [k, resolved];
-    });
+  const themes = Object.entries(resolvedThemes).map(([themeName, themeObj]) => {
+    const entries = flatten(themeObj);
     return [themeName, entries];
   });
 
